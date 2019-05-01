@@ -6,8 +6,8 @@
 // the OLED used
 U8X8_SSD1306_128X64_NONAME_SW_I2C u8x8(/* clock=*/ 15, /* data=*/ 4, /* reset=*/ 16);
 
-const char* host = "square.famousdavis.net";
-const size_t MAX_CONTENT_SIZE = 512;       // max size of the HTTP response
+const char* host = "data.rsssite.net";    //the URL where the RSS data is coming from
+const size_t MAX_CONTENT_SIZE = 512;        // max size of the HTTP response
 const unsigned long HTTP_TIMEOUT = 100000;  // max respone time from server
 
 // character dimensions (for aligning text)
@@ -27,7 +27,7 @@ const unsigned long HTTP_TIMEOUT = 100000;  // max respone time from server
 #define YPOS 1
 #define DELTAY 2
 
-// The type of data that we want to extract from the page
+// The type of data that we want to extract from the page, I am collecting sales data
 struct SalesData {
   char totalCollected[32];
   char grossSales[32];
@@ -41,14 +41,8 @@ struct SalesData {
 #define LOGO16_GLCD_HEIGHT 16 
 #define LOGO16_GLCD_WIDTH  16 
 
-//#if (SSD1306_LCDHEIGHT != 64)
-//#error("Height incorrect, please fix Adafruit_SSD1306.h!");
-//#endif
-
-//const char* ssid = "Peace Love Goodness";
-//const char* password = "aaaaaaaaaa";
-const char* ssid = "iPhone";
-const char* password = "aaaaaaaaab";
+const char* ssid = "enter your wifi ssid here";
+const char* password = "enter your password here";
 
 WiFiClient client;
 
@@ -148,8 +142,6 @@ void loop()
   strcpy(salesData.grossSales, root["grossSales"]);
   strcpy(salesData.lastWeek, root["lastWeek"]);
   strcpy(salesData.sixMonths, root["sixMonths"]);
-  //display.setCursor(DP_WID_MID - (3 * CH_WID * 2),15);
-  //display.setTextSize(2);
   u8x8.draw2x2String(0,2,"$");
   u8x8.draw2x2String(2,2,salesData.grossSales);
   u8x8.drawString(0,4,"1 Wk: ");
@@ -170,7 +162,7 @@ void loop()
   strcat(buf,"%");
   u8x8.drawString(7,5,salesData.sixMonths);
 
-  delay(60000);
+  delay(60000);   //wait one minute
 }
 
 // Skip HTTP headers so that we are at the beginning of the response's body
